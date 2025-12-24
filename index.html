@@ -168,15 +168,15 @@
             "isp": {
                 year1: {
                     s1: [
-                        { title: "Anatomie-physiologie", icon: "🫀" },
-                        { title: "Anthropologie/Psychologie/Psychosociologie", icon: "👥" },
-                        { title: "Hygiène hospitalière", icon: "✨" },
-                        { title: "Législation/Ethique professionnelle/Déontologie", icon: "⚖️" },
-                        { title: "Santé publique/Démographie/Economie de santé", icon: "📊" },
-                        { title: "Secourisme", icon: "🚑" },
-                        { title: "Les fondamentes de la profession paramédicale", icon: "📖" },
-                        { title: "Remédiation linguistique/Techniques d'expression", icon: "✍️" },
-                        { title: "Terminologie médicale", icon: "🔤" }
+                        { title: "Anatomie-physiologie", icon: "🫀", url: "https://mega.nz/file/02BQES7Q#o8wiP1ZMTSKL-E4fVsOj8xA2MsTTVNn5yEOyMckFNUc" },
+                        { title: "Anthropologie/Psychologie/Psychosociologie", icon: "👥", url: "https://mega.nz/file/w6h3STKa#lsrMtK_nos9Mw8gblNgwx0xQqiy2Z65u46dD1ql9m3A" },
+                        { title: "Hygiène hospitalière", icon: "✨", url: "https://mega.nz/file/JyRgiKYB#VRwo17yG7sOBQLYGKdZewrCIELdpiOOGNjwUUII18DA" },
+                        { title: "Législation/Ethique professionnelle/Déontologie", icon: "⚖️", url: "https://mega.nz/file/QqIGCa7Z#R_5MBll0WZoJ46ov9PQ4WCek33vZitj9is3mbqSDrg4" },
+                        { title: "Santé publique/Démographie/Economie de santé", icon: "📊", url: "https://mega.nz/file/pnQz2DLa#ALtZxBd4Eaa4tDfZEYZqEOu-VZppoPzw4TXnr1erCTE" },
+                        { title: "Secourisme", icon: "🚑", url: "https://mega.nz/file/97pWAKrZ#QE8n9Oj211u74hj5f9JvrXT3_q33B4rrRE6UmCzS4-U" },
+                        { title: "Les fondamentes de la profession paramédicale", icon: "📖", url: "https://mega.nz/file/omBhUSpS#V6ptcfw70IucmvsXMiEZ-io_cOspLcDwGTAmw_BQswQ" },
+                        { title: "Remédiation linguistique/Techniques d'expression", icon: "✍️", url: "https://mega.nz/file/ljIHVDRY#5pOfcJPuhtm-x4PQFezLg2iaNbG8biNfCXFkaRBjXAY" },
+                        { title: "Terminologie médicale", icon: "🔤", url: "https://mega.nz/file/53ZBmSSZ#_XUdTCQFLDfbi60zVy4D8X7OKjeFnXxIzpOV2RQQTxc" }
                     ],
                     s2: [
                         { title: "Anatomie-physiologie 2ème partie", icon: "🫁" },
@@ -324,9 +324,9 @@
                     ],
                     s4: [
                         { title: "Puériculture", icon: "👶" },
-                        { title: "Soins en pédiatrie", icon: "🧸" },
+                        { title: "Soins en péديatrie", icon: "🧸" },
                         { title: "Soins en gynéco-obstétrique", icon: "🤱" },
-                        { title: "Soins en gastro – entérologie", icon: "🍱" },
+                        { title: "Soins en gastro – entérologية", icon: "🍱" },
                         { title: "Soins en uro-néphrologie", icon: "🧪" },
                         { title: "Soins en neuropsychiatrie", icon: "🧠" },
                         { title: "Soins en oto-rhino-laryngologie", icon: "👂" },
@@ -402,7 +402,6 @@
             document.getElementById('breadcrumb-level-2').innerText = "";
             document.getElementById('section-title').innerText = "اختر السنة الدراسية";
             
-            // Hide Year 3 for ATS as it's only 2 years
             const y3 = document.getElementById('year3-btn');
             if(currentSpecialty === 'ats') y3.classList.add('hidden');
             else y3.classList.remove('hidden');
@@ -452,9 +451,9 @@
                             <span class="text-xl p-2 bg-slate-50 rounded-lg">${lesson.icon}</span>
                             <h4 class="font-bold text-slate-700 text-sm leading-tight">${lesson.title}</h4>
                         </div>
-                        <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] px-3 py-2 rounded-lg font-bold flex items-center gap-1 shadow-sm whitespace-nowrap">
+                        <a href="${lesson.url || '#'}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] px-3 py-2 rounded-lg font-bold flex items-center gap-1 shadow-sm whitespace-nowrap ${!lesson.url ? 'opacity-50 cursor-not-allowed' : ''}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                            تحميل
+                            ${lesson.url ? 'تحميل' : 'قريباً'}
                         </a>
                     `;
                     container.appendChild(div);
