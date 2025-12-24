@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARAZAZ - المنصة العلمية للشبه طبي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .medical-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
+        }
+        .category-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-color: #2563eb;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.closed {
+            transform: translateX(100%);
+        }
+        .semester-tab {
+            transition: all 0.3s;
+        }
+        .semester-tab.active {
+            background-color: #2563eb;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+        }
+        .lesson-card {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-extrabold text-blue-600 tracking-tight">
+                PARA<span class="text-slate-800">ZAZ</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-100 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                    التخصصات
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Drawer -->
+    <div id="sidebar" class="sidebar closed fixed top-0 right-0 h-full w-80 bg-white z-[60] shadow-2xl p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-bold text-slate-800">تصفح التخصصات</h2>
+            <button onclick="toggleSidebar()" class="text-slate-400 hover:text-red-500 text-2xl">&times;</button>
+        </div>
+        <ul id="sidebar-list" class="space-y-3"></ul>
+    </div>
+    
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+
+    <!-- Header -->
+    <header id="main-header" class="medical-gradient py-12 px-6 text-center text-white">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-3">دليل التخصصات الشبه طبية</h1>
+        <p class="text-blue-100 max-w-2xl mx-auto">اختر تخصصك للوصول إلى الدروس والمواد العلمية المنظمة.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-10 px-6">
+        <div id="navigation-breadcrumb" class="hidden mb-6 flex items-center gap-2 text-sm">
+            <button onclick="showHome()" class="text-blue-600 hover:underline">الرئيسية</button>
+            <span class="text-slate-400">/</span>
+            <span id="breadcrumb-level-1" class="text-slate-400"></span>
+            <span id="breadcrumb-sep" class="hidden text-slate-400">/</span>
+            <span id="breadcrumb-level-2" class="text-slate-600 font-bold"></span>
+        </div>
+
+        <h2 id="section-title" class="text-2xl font-bold mb-8 text-slate-800 border-r-4 border-blue-600 pr-4">الأقسام المتاحة</h2>
+        
+        <!-- View 1: Main Categories -->
+        <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+        <!-- View 2: Levels Selection (Years) -->
+        <div id="levels-grid" class="hidden flex flex-col gap-4">
+            <div class="category-card bg-white p-6 rounded-xl flex justify-between items-center cursor-pointer border-2 border-blue-50" onclick="showSemesterDetails(1)">
+                <div class="flex items-center gap-4">
+                    <span class="text-3xl">🎓</span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">السنة الأولى</h3>
+                        <p class="text-sm text-slate-500">L1 - السداسي الأول والثاني</p>
+                    </div>
+                </div>
+                <div class="bg-blue-600 text-white p-2 rounded-lg">عرض</div>
+            </div>
+            <div class="category-card bg-white p-6 rounded-xl flex justify-between items-center cursor-pointer border-2 border-blue-50" onclick="showSemesterDetails(2)">
+                <div class="flex items-center gap-4">
+                    <span class="text-3xl">📚</span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">السنة الثانية</h3>
+                        <p class="text-sm text-slate-500">L2 - السداسي الثالث والرابع</p>
+                    </div>
+                </div>
+                <div class="bg-blue-600 text-white p-2 rounded-lg">عرض</div>
+            </div>
+            <div id="year3-btn" class="category-card bg-white p-6 rounded-xl flex justify-between items-center cursor-pointer border-2 border-blue-50" onclick="showSemesterDetails(3)">
+                <div class="flex items-center gap-4">
+                    <span class="text-3xl">🩺</span>
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-lg">السنة الثالثة</h3>
+                        <p class="text-sm text-slate-500">L3 - السداسي الخامس والسادس</p>
+                    </div>
+                </div>
+                <div class="bg-blue-600 text-white p-2 rounded-lg">عرض</div>
+            </div>
+        </div>
+
+        <!-- View 3: Semester Tabs & Lessons -->
+        <div id="details-grid" class="hidden flex flex-col gap-4">
+            <div id="tabs-wrapper" class="flex gap-2 mb-6 bg-slate-200 p-1 rounded-xl">
+                <button id="tab-left" onclick="switchSemester('left')" class="semester-tab flex-1 py-3 px-4 rounded-lg font-bold active"></button>
+                <button id="tab-right" onclick="switchSemester('right')" class="semester-tab flex-1 py-3 px-4 rounded-lg font-bold"></button>
+            </div>
+            <div id="lessons-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+
+        <!-- View 4: Not Available State -->
+        <div id="not-available" class="hidden py-16 text-center">
+            <div class="text-6xl mb-4">🚧</div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">هذا التخصص غير متاح حالياً</h3>
+            <p class="text-slate-500 mb-6">نحن نعمل على إضافة الدروس الخاصة بهذا القسم قريباً.</p>
+            <button onclick="showHome()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold">العودة للرئيسية</button>
+        </div>
+    </main>
+
+    <script>
+        const medicalCategories = [
+            { id: 1, title: "ممرض في الصحة العمومية", icon: "💉", key: "isp" },
+            { id: 2, title: "قابلة في الصحة العمومية", icon: "👶", key: "sage_femme" },
+            { id: 3, title: "مخبري في الصحة العمومية", icon: "🔬", key: "labo" },
+            { id: 4, title: "مشغل أجهزة التصوير الطبي", icon: "🩻", key: "radio" },
+            { id: 5, title: "مساعد طبي في الصحة العمومية", icon: "📝", key: "ats" },
+            { id: 6, title: "أخصائي العلاج الطبيعي والتدليك", icon: "🧘", key: "kine" },
+            { id: 7, title: "أخصائي التغذية العلاجية", icon: "🥗", key: "diet" },
+            { id: 8, title: "مخدر وإنعاش في الصحة العمومية", icon: "🫁", key: "anesthesie" },
+            { id: 10, title: "أخصائي النطق والسمع (الأرطفونيا)", icon: "🗣️", key: "ortho" }
+        ];
+
+        const lessonsData = {
+            "isp": {
+                year1: {
+                    s1: [
+                        { title: "Anatomie-physiologie", icon: "🫀" },
+                        { title: "Anthropologie/Psychologie/Psychosociologie", icon: "👥" },
+                        { title: "Hygiène hospitalière", icon: "✨" },
+                        { title: "Législation/Ethique professionnelle/Déontologie", icon: "⚖️" },
+                        { title: "Santé publique/Démographie/Economie de santé", icon: "📊" },
+                        { title: "Secourisme", icon: "🚑" },
+                        { title: "Les fondamentes de la profession paramédicale", icon: "📖" },
+                        { title: "Remédiation linguistique/Techniques d'expression", icon: "✍️" },
+                        { title: "Terminologie médicale", icon: "🔤" }
+                    ],
+                    s2: [
+                        { title: "Anatomie-physiologie 2ème partie", icon: "🫁" },
+                        { title: "Chirurgie", icon: "🔪" },
+                        { title: "Soins infirmiers", icon: "🩹" },
+                        { title: "Hygiène hospitalière 2ème partie", icon: "🧼" },
+                        { title: "Informatique et internet", icon: "💻" },
+                        { title: "Information/Education/Communication", icon: "📢" },
+                        { title: "Science de l'environnement", icon: "🌿" },
+                        { title: "Sémiologie", icon: "📋" },
+                        { title: "Microbiologie-Parasitologie-Immunologie", icon: "🦠" },
+                        { title: "Puériculture", icon: "👶" },
+                        { title: "Nutrition diététique", icon: "🍎" },
+                        { title: "Pharmacie", icon: "💊" }
+                    ]
+                },
+                year2: {
+                    s3: [
+                        { title: "Maladies infectieuses", icon: "🦠" },
+                        { title: "Pneumo-phtisiologie", icon: "🫁" },
+                        { title: "Cardiologie-vasculaire", icon: "❤️" },
+                        { title: "Gastro-entero-hépatologie", icon: "🍱" },
+                        { title: "Pharmacologie et thérapeutique", icon: "💊" },
+                        { title: "Soins infirmiers (S3)", icon: "🩹" },
+                        { title: "La démarche de soins infirmiers", icon: "📋" },
+                        { title: "Concevoir le project de soins infirmiers", icon: "📑" },
+                        { title: "Anglais Médicale", icon: "🇬🇧" },
+                        { title: "Santé familiale", icon: "👨‍👩‍👧‍👦" },
+                        { title: "Explorations biologiques", icon: "🔬" },
+                        { title: "Explorations radiologiques", icon: "🩻" }
+                    ],
+                    s4: [
+                        { title: "Réanimation", icon: "🏥" },
+                        { title: "Traumatologie / Orthopédie", icon: "🦴" },
+                        { title: "Urgences chirurgicales", icon: "🚑" },
+                        { title: "Endocrinologie", icon: "🩸" },
+                        { title: "Gynécologie/ Obstétrique", icon: "🤰" },
+                        { title: "Pédiatrie", icon: "🧸" },
+                        { title: "Soins infirmiers (S4)", icon: "🩹" },
+                        { title: "Soins infirmiers (Gynéco/Péd)", icon: "🤱" },
+                        { title: "Conduire Le projet de Soins", icon: "🚀" },
+                        { title: "Méthodologie de recherche", icon: "🔍" }
+                    ]
+                },
+                year3: {
+                    s5: [
+                        { title: "Hématologie", icon: "🩸" },
+                        { title: "Dermatologie vénérologie", icon: "🧴" },
+                        { title: "Neuropsychiatrie", icon: "🧠" },
+                        { title: "O.R.L", icon: "👂" },
+                        { title: "Ophtalmologie", icon: "👁️" },
+                        { title: "Uro-néphrologie", icon: "🧪" },
+                        { title: "Rhumatologie", icon: "🦴" },
+                        { title: "Cancérologie", icon: "🎗️" },
+                        { title: "Gériatrie", icon: "👴" },
+                        { title: "Soins infirmiers (Hémat/Uro/Neuro/Rhumat)", icon: "🩹" },
+                        { title: "Soins infirmiers (Dermato/ORL/Ophtalmo)", icon: "🩹" },
+                        { title: "Organisation du travail infirmiers", icon: "📋" }
+                    ]
+                }
+            },
+            "radio": {
+                year1: {
+                    s1: [
+                        { title: "Anatomie-physiologie", icon: "🫀" },
+                        { title: "Anthropologie/Psychologie/Psychosociologie", icon: "🧠" },
+                        { title: "Hygiène hospitalière", icon: "✨" },
+                        { title: "Législation/Ethique professionnelle/Déontologie", icon: "⚖️" },
+                        { title: "Santé publique/Démographie/Economie de santé", icon: "📊" },
+                        { title: "Secourisme", icon: "🚑" },
+                        { title: "Les fondamentes de la profession paramédicale", icon: "📖" },
+                        { title: "Remédiation linguistique/Techniques d'expression", icon: "✍️" },
+                        { title: "Terminologie médicale", icon: "🔤" }
+                    ],
+                    s2: [
+                        { title: "Physique fondamentale", icon: "⚡" },
+                        { title: "Formation et traitement d’image", icon: "🎞️" },
+                        { title: "Physique appliquée et technologie Imagerie", icon: "⚙️" },
+                        { title: "Radiobiologie", icon: "🧪" },
+                        { title: "Radioprotection", icon: "🛡️" },
+                        { title: "Examens radiologiques osseux 1", icon: "🦴" },
+                        { title: "Pharmacie", icon: "💊" },
+                        { title: "Techniques de soins", icon: "🩹" }
+                    ]
+                },
+                year2: {
+                    s3: [
+                        { title: "Examens radiologiques osseux 2", icon: "🦴" },
+                        { title: "Examens viscéraux", icon: "🫁" },
+                        { title: "Hygiène hospitalière", icon: "✨" },
+                        { title: "Radio-pédiatrie", icon: "👶" },
+                        { title: "Informatique et internet", icon: "💻" },
+                        { title: "Pharmacologie", icon: "💊" },
+                        { title: "Examens biologiques", icon: "🔬" },
+                        { title: "Pathologies / Sémiologie / Sémiologie Radiologique", icon: "📋" },
+                        { title: "Nutrition", icon: "🍎" }
+                    ],
+                    s4: [
+                        { title: "Examens spécialisés", icon: "🌟" },
+                        { title: "TDM : Physique appliquée et technologie", icon: "🖥️" },
+                        { title: "Exploration TDM", icon: "🔍" },
+                        { title: "Ostéodensitométrie", icon: "🦴" },
+                        { title: "Echographie : Physique / Technologie / Sémiologie", icon: "🔉" },
+                        { title: "Information, éducation, communication", icon: "📢" },
+                        { title: "Anglais médical", icon: "🇬🇧" },
+                        { title: "Méthodologie de recherche et statistiques", icon: "📈" },
+                        { title: "Oncologie", icon: "🎗️" }
+                    ]
+                }
+            },
+            "ats": {
+                year1: {
+                    s1: [
+                        { title: "Anatomie – Physiologie", icon: "🫀" },
+                        { title: "Terminologie médicale", icon: "🔤" },
+                        { title: "Méthodologie générale", icon: "📋" },
+                        { title: "Droit-Déontologie-éthique", icon: "⚖️" },
+                        { title: "Hygiène générale", icon: "🧼" },
+                        { title: "Santé publique", icon: "📊" },
+                        { title: "Psychologie", icon: "👥" }
+                    ],
+                    s2: [
+                        { title: "Microbiologie – Parasitologie", icon: "🦠" },
+                        { title: "Hygiène hospitalière", icon: "✨" },
+                        { title: "Sémiologie", icon: "📝" },
+                        { title: "Soins infirmiers", icon: "🩹" },
+                        { title: "Nutrition", icon: "🍎" },
+                        { title: "Pharmacie", icon: "💊" },
+                        { title: "Secourisme", icon: "🚑" }
+                    ]
+                },
+                year2: {
+                    s3: [
+                        { title: "Soins en maladies infectieuses", icon: "🦠" },
+                        { title: "Soins en obstétrique normale", icon: "🤰" },
+                        { title: "Soins en obstétrique pathologique", icon: "🏥" },
+                        { title: "Soins en traumatologie", icon: "🦴" },
+                        { title: "Soins en pédiatrie générale", icon: "🧸" },
+                        { title: "Soins en cancérologie", icon: "🎗️" },
+                        { title: "Soins en chirurgie", icon: "🔪" },
+                        { title: "Soins en pneumo-phtisiologie", icon: "🫁" },
+                        { title: "Soins en cardiologie vasculaire", icon: "❤️" },
+                        { title: "Soins en hématologie", icon: "🩸" },
+                        { title: "Information / Education / Communication", icon: "📢" }
+                    ],
+                    s4: [
+                        { title: "Puériculture", icon: "👶" },
+                        { title: "Soins en pédiatrie", icon: "🧸" },
+                        { title: "Soins en gynéco-obstétrique", icon: "🤱" },
+                        { title: "Soins en gastro – entérologie", icon: "🍱" },
+                        { title: "Soins en uro-néphrologie", icon: "🧪" },
+                        { title: "Soins en neuropsychiatrie", icon: "🧠" },
+                        { title: "Soins en oto-rhino-laryngologie", icon: "👂" },
+                        { title: "Soins en dermatologie", icon: "🧴" },
+                        { title: "Soins endocrinologie", icon: "🩸" },
+                        { title: "Soins en ophtalmologie", icon: "👁️" }
+                    ]
+                }
+            }
+        };
+
+        let currentYear = 1;
+        let currentSpecialty = "";
+
+        function initApp() {
+            const grid = document.getElementById('categories-grid');
+            const sidebarList = document.getElementById('sidebar-list');
+
+            medicalCategories.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = "category-card bg-white p-5 rounded-xl flex justify-between items-center cursor-pointer group";
+                card.onclick = () => { 
+                    currentSpecialty = cat.key;
+                    if(!lessonsData[cat.key]) {
+                        showNotAvailable();
+                    } else {
+                        showLevels(cat.title); 
+                    }
+                };
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">${cat.icon}</span>
+                        <h3 class="font-bold text-slate-800 text-lg">${cat.title}</h3>
+                    </div>
+                    <div class="text-blue-600 font-bold opacity-0 group-hover:opacity-100 transition">تصفح ←</div>
+                `;
+                grid.appendChild(card);
+
+                const li = document.createElement('li');
+                li.innerHTML = `<button onclick="handleSidebarSelection('${cat.key}', '${cat.title}')" class="w-full text-right p-3 rounded-lg hover:bg-slate-50 flex items-center gap-3"><span>${cat.icon}</span><span>${cat.title}</span></button>`;
+                sidebarList.appendChild(li);
+            });
+        }
+
+        function handleSidebarSelection(key, title) {
+            currentSpecialty = key;
+            toggleSidebar();
+            if(!lessonsData[key]) {
+                showNotAvailable();
+            } else {
+                showLevels(title);
+            }
+        }
+
+        function showNotAvailable() {
+            document.getElementById('categories-grid').classList.add('hidden');
+            document.getElementById('levels-grid').classList.add('hidden');
+            document.getElementById('details-grid').classList.add('hidden');
+            document.getElementById('not-available').classList.remove('hidden');
+            document.getElementById('navigation-breadcrumb').classList.remove('hidden');
+            document.getElementById('breadcrumb-level-1').innerText = "تنبيه";
+            document.getElementById('section-title').innerText = "غير متاح";
+        }
+
+        function showLevels(title) {
+            document.getElementById('categories-grid').classList.add('hidden');
+            document.getElementById('not-available').classList.add('hidden');
+            document.getElementById('levels-grid').classList.remove('hidden');
+            document.getElementById('details-grid').classList.add('hidden');
+            document.getElementById('navigation-breadcrumb').classList.remove('hidden');
+            document.getElementById('breadcrumb-level-1').innerText = title;
+            document.getElementById('breadcrumb-sep').classList.add('hidden');
+            document.getElementById('breadcrumb-level-2').innerText = "";
+            document.getElementById('section-title').innerText = "اختر السنة الدراسية";
+            
+            // Hide Year 3 for ATS as it's only 2 years
+            const y3 = document.getElementById('year3-btn');
+            if(currentSpecialty === 'ats') y3.classList.add('hidden');
+            else y3.classList.remove('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showSemesterDetails(year) {
+            currentYear = year;
+            document.getElementById('levels-grid').classList.add('hidden');
+            document.getElementById('details-grid').classList.remove('hidden');
+            document.getElementById('breadcrumb-sep').classList.remove('hidden');
+            
+            const yearsMap = {1: "السنة الأولى", 2: "السنة الثانية", 3: "السنة الثالثة"};
+            const sMap = { 1: ["S1", "S2"], 2: ["S3", "S4"], 3: ["S5", "S6"] };
+            
+            document.getElementById('breadcrumb-level-2').innerText = yearsMap[year];
+            document.getElementById('tab-left').innerText = sMap[year][0];
+            document.getElementById('tab-right').innerText = sMap[year][1];
+            
+            switchSemester('left');
+        }
+
+        function switchSemester(side) {
+            const container = document.getElementById('lessons-container');
+            document.getElementById('tab-left').classList.toggle('active', side === 'left');
+            document.getElementById('tab-right').classList.toggle('active', side === 'right');
+            
+            container.innerHTML = '';
+            
+            const yearKey = `year${currentYear}`;
+            let semKey;
+            if(currentYear === 1) semKey = (side === 'left' ? 's1' : 's2');
+            else if(currentYear === 2) semKey = (side === 'left' ? 's3' : 's4');
+            else semKey = (side === 'left' ? 's5' : 's6');
+            
+            const lessons = (lessonsData[currentSpecialty] && lessonsData[currentSpecialty][yearKey]) ? lessonsData[currentSpecialty][yearKey][semKey] : [];
+
+            if (!lessons || lessons.length === 0) {
+                container.innerHTML = `<div class="col-span-full p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 italic">لا توجد دروس مضافة حالياً لهذا السداسي.</div>`;
+            } else {
+                lessons.forEach(lesson => {
+                    const div = document.createElement('div');
+                    div.className = "lesson-card bg-white p-4 rounded-xl flex justify-between items-center border border-slate-100 hover:shadow-md transition-all";
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl p-2 bg-slate-50 rounded-lg">${lesson.icon}</span>
+                            <h4 class="font-bold text-slate-700 text-sm leading-tight">${lesson.title}</h4>
+                        </div>
+                        <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white text-[10px] px-3 py-2 rounded-lg font-bold flex items-center gap-1 shadow-sm whitespace-nowrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                            تحميل
+                        </a>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showHome() {
+            document.getElementById('categories-grid').classList.remove('hidden');
+            document.getElementById('levels-grid').classList.add('hidden');
+            document.getElementById('details-grid').classList.add('hidden');
+            document.getElementById('not-available').classList.add('hidden');
+            document.getElementById('navigation-breadcrumb').classList.add('hidden');
+            document.getElementById('section-title').innerText = "الأقسام المتاحة";
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('closed');
+            document.getElementById('overlay').classList.toggle('hidden');
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
