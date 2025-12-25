@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PARAZAZ - المنصة العلمية للشبه طبي</title>
+    <title>PARAZAZDECALE - المنصة العلمية للشبه طبي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -48,14 +48,13 @@
     </style>
 </head>
 <body class="bg-slate-50">
-
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-slate-200 px-6 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="text-2xl font-extrabold text-blue-600 tracking-tight">
-                PARA<span class="text-slate-800">ZAZ</span>
+                PARA<span class="text-slate-800">ZAZDECALE</span>
             </div>
-            
+           
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-100 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,7 +65,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Side Drawer -->
     <div id="sidebar" class="sidebar closed fixed top-0 right-0 h-full w-80 bg-white z-[60] shadow-2xl p-6 overflow-y-auto">
         <div class="flex justify-between items-center mb-8">
@@ -75,30 +73,34 @@
         </div>
         <ul id="sidebar-list" class="space-y-3"></ul>
     </div>
-    
+   
     <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
-
     <!-- Header -->
     <header id="main-header" class="medical-gradient py-12 px-6 text-center text-white">
         <h1 class="text-3xl md:text-4xl font-extrabold mb-3">دليل التخصصات الشبه طبية</h1>
         <p class="text-blue-100 max-w-2xl mx-auto">اختر تخصصك للوصول إلى الدروس والمواد العلمية المنظمة.</p>
     </header>
-
     <!-- Main Content -->
     <main class="max-w-4xl mx-auto py-10 px-6">
-        <div id="navigation-breadcrumb" class="hidden mb-6 flex items-center gap-2 text-sm">
+        <div id="navigation-breadcrumb" class="hidden mb-6 flex items-center gap-3 text-sm">
             <button onclick="showHome()" class="text-blue-600 hover:underline">الرئيسية</button>
             <span class="text-slate-400">/</span>
             <span id="breadcrumb-level-1" class="text-slate-400"></span>
             <span id="breadcrumb-sep" class="hidden text-slate-400">/</span>
             <span id="breadcrumb-level-2" class="text-slate-600 font-bold"></span>
-        </div>
 
+            <!-- زر العودة الجديد -->
+            <button onclick="goBack()" class="mr-auto bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+                رجوع
+            </button>
+        </div>
         <h2 id="section-title" class="text-2xl font-bold mb-8 text-slate-800 border-r-4 border-blue-600 pr-4">الأقسام المتاحة</h2>
-        
+       
         <!-- View 1: Main Categories -->
         <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-
         <!-- View 2: Levels Selection (Years) -->
         <div id="levels-grid" class="hidden flex flex-col gap-4">
             <div class="category-card bg-white p-6 rounded-xl flex justify-between items-center cursor-pointer border-2 border-blue-50" onclick="showSemesterDetails(1)">
@@ -132,7 +134,6 @@
                 <div class="bg-blue-600 text-white p-2 rounded-lg">عرض</div>
             </div>
         </div>
-
         <!-- View 3: Semester Tabs & Lessons -->
         <div id="details-grid" class="hidden flex flex-col gap-4">
             <div id="tabs-wrapper" class="flex gap-2 mb-6 bg-slate-200 p-1 rounded-xl">
@@ -141,7 +142,6 @@
             </div>
             <div id="lessons-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
-
         <!-- View 4: Not Available State -->
         <div id="not-available" class="hidden py-16 text-center">
             <div class="text-6xl mb-4">🚧</div>
@@ -150,14 +150,14 @@
             <button onclick="showHome()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold">العودة للرئيسية</button>
         </div>
     </main>
-
     <script>
+        // ترتيب التخصصات: الأقسام التي تحتوي على بيانات كاملة (مع روابط أو دروس) في الأعلى
         const medicalCategories = [
-            { id: 1, title: "ممرض في الصحة العمومية", icon: "💉", key: "isp" },
+            { id: 1, title: "ممرض في الصحة العمومية", icon: "💉", key: "isp" },         // متاح كامل + روابط
+            { id: 4, title: "مشغل أجهزة التصوير الطبي", icon: "🩻", key: "radio" },   // متاح كامل
+            { id: 5, title: "مساعد طبي في الصحة العمومية", icon: "📝", key: "ats" },   // متاح كامل
             { id: 2, title: "قابلة في الصحة العمومية", icon: "👶", key: "sage_femme" },
             { id: 3, title: "مخبري في الصحة العمومية", icon: "🔬", key: "labo" },
-            { id: 4, title: "مشغل أجهزة التصوير الطبي", icon: "🩻", key: "radio" },
-            { id: 5, title: "مساعد طبي في الصحة العمومية", icon: "📝", key: "ats" },
             { id: 6, title: "أخصائي العلاج الطبيعي والتدليك", icon: "🧘", key: "kine" },
             { id: 7, title: "أخصائي التغذية العلاجية", icon: "🥗", key: "diet" },
             { id: 8, title: "مخدر وإنعاش في الصحة العمومية", icon: "🫁", key: "anesthesie" },
@@ -337,23 +337,23 @@
                 }
             }
         };
-
         let currentYear = 1;
         let currentSpecialty = "";
+        let currentView = "home"; // home | levels | details | notavailable
 
         function initApp() {
             const grid = document.getElementById('categories-grid');
             const sidebarList = document.getElementById('sidebar-list');
-
             medicalCategories.forEach(cat => {
                 const card = document.createElement('div');
                 card.className = "category-card bg-white p-5 rounded-xl flex justify-between items-center cursor-pointer group";
-                card.onclick = () => { 
+                card.onclick = () => {
                     currentSpecialty = cat.key;
+                    currentView = "levels";
                     if(!lessonsData[cat.key]) {
                         showNotAvailable();
                     } else {
-                        showLevels(cat.title); 
+                        showLevels(cat.title);
                     }
                 };
                 card.innerHTML = `
@@ -373,6 +373,7 @@
 
         function handleSidebarSelection(key, title) {
             currentSpecialty = key;
+            currentView = "levels";
             toggleSidebar();
             if(!lessonsData[key]) {
                 showNotAvailable();
@@ -388,7 +389,10 @@
             document.getElementById('not-available').classList.remove('hidden');
             document.getElementById('navigation-breadcrumb').classList.remove('hidden');
             document.getElementById('breadcrumb-level-1').innerText = "تنبيه";
+            document.getElementById('breadcrumb-sep').classList.add('hidden');
+            document.getElementById('breadcrumb-level-2').innerText = "";
             document.getElementById('section-title').innerText = "غير متاح";
+            currentView = "notavailable";
         }
 
         function showLevels(title) {
@@ -401,27 +405,29 @@
             document.getElementById('breadcrumb-sep').classList.add('hidden');
             document.getElementById('breadcrumb-level-2').innerText = "";
             document.getElementById('section-title').innerText = "اختر السنة الدراسية";
-            
+           
             const y3 = document.getElementById('year3-btn');
             if(currentSpecialty === 'ats') y3.classList.add('hidden');
             else y3.classList.remove('hidden');
-            
+           
+            currentView = "levels";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showSemesterDetails(year) {
             currentYear = year;
+            currentView = "details";
             document.getElementById('levels-grid').classList.add('hidden');
             document.getElementById('details-grid').classList.remove('hidden');
             document.getElementById('breadcrumb-sep').classList.remove('hidden');
-            
+           
             const yearsMap = {1: "السنة الأولى", 2: "السنة الثانية", 3: "السنة الثالثة"};
             const sMap = { 1: ["S1", "S2"], 2: ["S3", "S4"], 3: ["S5", "S6"] };
-            
+           
             document.getElementById('breadcrumb-level-2').innerText = yearsMap[year];
             document.getElementById('tab-left').innerText = sMap[year][0];
             document.getElementById('tab-right').innerText = sMap[year][1];
-            
+           
             switchSemester('left');
         }
 
@@ -429,17 +435,16 @@
             const container = document.getElementById('lessons-container');
             document.getElementById('tab-left').classList.toggle('active', side === 'left');
             document.getElementById('tab-right').classList.toggle('active', side === 'right');
-            
+           
             container.innerHTML = '';
-            
+           
             const yearKey = `year${currentYear}`;
             let semKey;
             if(currentYear === 1) semKey = (side === 'left' ? 's1' : 's2');
             else if(currentYear === 2) semKey = (side === 'left' ? 's3' : 's4');
             else semKey = (side === 'left' ? 's5' : 's6');
-            
+           
             const lessons = (lessonsData[currentSpecialty] && lessonsData[currentSpecialty][yearKey]) ? lessonsData[currentSpecialty][yearKey][semKey] : [];
-
             if (!lessons || lessons.length === 0) {
                 container.innerHTML = `<div class="col-span-full p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 italic">لا توجد دروس مضافة حالياً لهذا السداسي.</div>`;
             } else {
@@ -469,6 +474,17 @@
             document.getElementById('not-available').classList.add('hidden');
             document.getElementById('navigation-breadcrumb').classList.add('hidden');
             document.getElementById('section-title').innerText = "الأقسام المتاحة";
+            currentView = "home";
+        }
+
+        function goBack() {
+            if (currentView === "levels") {
+                showHome();
+            } else if (currentView === "details") {
+                showLevels(document.getElementById('breadcrumb-level-1').innerText);
+            } else if (currentView === "notavailable") {
+                showHome();
+            }
         }
 
         function toggleSidebar() {
