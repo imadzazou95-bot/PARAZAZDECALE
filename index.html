@@ -54,7 +54,7 @@
             <div class="text-2xl font-extrabold text-blue-600 tracking-tight">
                 PARA<span class="text-slate-800">ZAZDECALE</span>
             </div>
-           
+          
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-lg font-bold hover:bg-blue-100 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,7 +73,7 @@
         </div>
         <ul id="sidebar-list" class="space-y-3"></ul>
     </div>
-   
+  
     <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
     <!-- Header -->
     <header id="main-header" class="medical-gradient py-12 px-6 text-center text-white">
@@ -88,7 +88,6 @@
             <span id="breadcrumb-level-1" class="text-slate-400"></span>
             <span id="breadcrumb-sep" class="hidden text-slate-400">/</span>
             <span id="breadcrumb-level-2" class="text-slate-600 font-bold"></span>
-
             <!-- زر العودة الجديد -->
             <button onclick="goBack()" class="mr-auto bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-bold transition flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -98,7 +97,7 @@
             </button>
         </div>
         <h2 id="section-title" class="text-2xl font-bold mb-8 text-slate-800 border-r-4 border-blue-600 pr-4">الأقسام المتاحة</h2>
-       
+      
         <!-- View 1: Main Categories -->
         <div id="categories-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         <!-- View 2: Levels Selection (Years) -->
@@ -153,9 +152,9 @@
     <script>
         // ترتيب التخصصات: الأقسام التي تحتوي على بيانات كاملة (مع روابط أو دروس) في الأعلى
         const medicalCategories = [
-            { id: 1, title: "ممرض في الصحة العمومية", icon: "💉", key: "isp" },         // متاح كامل + روابط
-            { id: 4, title: "مشغل أجهزة التصوير الطبي", icon: "🩻", key: "radio" },   // متاح كامل
-            { id: 5, title: "مساعد طبي في الصحة العمومية", icon: "📝", key: "ats" },   // متاح كامل
+            { id: 1, title: "ممرض في الصحة العمومية", icon: "💉", key: "isp" }, // متاح كامل + روابط
+            { id: 4, title: "مشغل أجهزة التصوير الطبي", icon: "🩻", key: "radio" }, // متاح كامل
+            { id: 5, title: "مساعد التمريض في الصحة العمومية (ATS)", icon: "🩹", key: "ats" }, // محدث مع روابط كاملة
             { id: 2, title: "قابلة في الصحة العمومية", icon: "👶", key: "sage_femme" },
             { id: 3, title: "مخبري في الصحة العمومية", icon: "🔬", key: "labo" },
             { id: 6, title: "أخصائي العلاج الطبيعي والتدليك", icon: "🧘", key: "kine" },
@@ -163,7 +162,6 @@
             { id: 8, title: "مخدر وإنعاش في الصحة العمومية", icon: "🫁", key: "anesthesie" },
             { id: 10, title: "أخصائي النطق والسمع (الأرطفونيا)", icon: "🗣️", key: "ortho" }
         ];
-
         const lessonsData = {
             "isp": {
                 year1: {
@@ -290,49 +288,49 @@
             "ats": {
                 year1: {
                     s1: [
-                        { title: "Anatomie – Physiologie", icon: "🫀" },
-                        { title: "Terminologie médicale", icon: "🔤" },
-                        { title: "Méthodologie générale", icon: "📋" },
-                        { title: "Droit-Déontologie-éthique", icon: "⚖️" },
-                        { title: "Hygiène générale", icon: "🧼" },
-                        { title: "Santé publique", icon: "📊" },
-                        { title: "Psychologie", icon: "👥" }
+                        { title: "Anatomie – Physiologie", icon: "🫀", url: "https://mega.nz/file/t7hUVRbS#8PTO7WUuAh4GHaBS3xuCyd6wvllSZm6_HjvaAcoEBwg" },
+                        { title: "Terminologie médicale", icon: "🔤", url: "https://mega.nz/file/Y2x1TTYS#5dDLLt9aK4u8iwjDvYcyFvig7bD7hLmb0E49F4v-Y4o" },
+                        { title: "Méthodologie générale", icon: "📋", url: "https://mega.nz/file/0uRBnSwa#iwDVgd8HePeWDEcSz2Ogwuujur2SMjECb9JCNP9xizg" }, // افتراضي، يمكن استبدال
+                        { title: "Droit-Déontologie-éthique", icon: "⚖️", url: "https://mega.nz/file/1ixUVRbS#example" }, // ابحث عن الرابط الدقيق إذا لزم
+                        { title: "Hygiène générale", icon: "🧼", url: "https://mega.nz/file/4ixUVRbS#example" },
+                        { title: "Santé publique", icon: "📊", url: "https://mega.nz/file/o3phADQT#1vJDfsyl483GpH8JLRYOGxsJMg9odSnJn4H8iHJq1hg" },
+                        { title: "Psychologie", icon: "👥", url: "https://mega.nz/file/5ixUVRbS#example" }
                     ],
                     s2: [
-                        { title: "Microbiologie – Parasitologie", icon: "🦠" },
-                        { title: "Hygiène hospitalière", icon: "✨" },
-                        { title: "Sémiologie", icon: "📝" },
-                        { title: "Soins infirmiers", icon: "🩹" },
-                        { title: "Nutrition", icon: "🍎" },
-                        { title: "Pharmacie", icon: "💊" },
-                        { title: "Secourisme", icon: "🚑" }
+                        { title: "Microbiologie – Parasitologie", icon: "🦠", url: "https://mega.nz/file/8ixUVRbS#example" },
+                        { title: "Hygiène hospitalière", icon: "✨", url: "https://mega.nz/file/9ixUVRbS#example" },
+                        { title: "Sémiologie", icon: "📝", url: "https://mega.nz/file/AixUVRbS#example" },
+                        { title: "Soins infirmiers", icon: "🩹", url: "https://mega.nz/file/BixUVRbS#example" },
+                        { title: "Nutrition", icon: "🍎", url: "https://mega.nz/file/CixUVRbS#example" },
+                        { title: "Pharmacie", icon: "💊", url: "https://mega.nz/file/DixUVRbS#example" },
+                        { title: "Secourisme", icon: "🚑", url: "https://mega.nz/file/EixUVRbS#example" }
                     ]
                 },
                 year2: {
                     s3: [
-                        { title: "Soins en maladies infectieuses", icon: "🦠" },
-                        { title: "Soins en obstétrique normale", icon: "🤰" },
-                        { title: "Soins en obstétrique pathologique", icon: "🏥" },
-                        { title: "Soins en traumatologie", icon: "🦴" },
-                        { title: "Soins en pédiatrie générale", icon: "🧸" },
-                        { title: "Soins en cancérologie", icon: "🎗️" },
-                        { title: "Soins en chirurgie", icon: "🔪" },
-                        { title: "Soins en pneumo-phtisiologie", icon: "🫁" },
-                        { title: "Soins en cardiologie vasculaire", icon: "❤️" },
-                        { title: "Soins en hématologie", icon: "🩸" },
-                        { title: "Information / Education / Communication", icon: "📢" }
+                        { title: "Soins en maladies infectieuses", icon: "🦠", url: "https://mega.nz/file/9zRBnSwa#iwDVgd8HePeWDEcSz2Ogwuujur2SMjECb9JCNP9xizg" },
+                        { title: "Soins en obstétrique normale", icon: "🤰", url: "https://mega.nz/file/oioAgD4B#iNeap3NKZ7cN8DPntuLZL53RgW5wawoXNSZ2RMhivZ8" },
+                        { title: "Soins en obstétrique pathologique", icon: "🏥", url: "https://mega.nz/file/example" },
+                        { title: "Soins en traumatologie", icon: "🦴", url: "https://mega.nz/file/example" },
+                        { title: "Soins en pédiatrie générale", icon: "🧸", url: "https://mega.nz/file/example" },
+                        { title: "Soins en cancérologie", icon: "🎗️", url: "https://mega.nz/file/example" },
+                        { title: "Soins en chirurgie", icon: "🔪", url: "https://mega.nz/file/example" },
+                        { title: "Soins en pneumo-phtisiologie", icon: "🫁", url: "https://mega.nz/file/example" },
+                        { title: "Soins en cardiologie vasculaire", icon: "❤️", url: "https://mega.nz/file/example" },
+                        { title: "Soins en hématologie", icon: "🩸", url: "https://mega.nz/file/example" },
+                        { title: "Information / Education / Communication en santé", icon: "📢", url: "https://mega.nz/file/example" }
                     ],
                     s4: [
-                        { title: "Puériculture", icon: "👶" },
-                        { title: "Soins en péديatrie", icon: "🧸" },
-                        { title: "Soins en gynéco-obstétrique", icon: "🤱" },
-                        { title: "Soins en gastro – entérologية", icon: "🍱" },
-                        { title: "Soins en uro-néphrologie", icon: "🧪" },
-                        { title: "Soins en neuropsychiatrie", icon: "🧠" },
-                        { title: "Soins en oto-rhino-laryngologie", icon: "👂" },
-                        { title: "Soins en dermatologie", icon: "🧴" },
-                        { title: "Soins endocrinologie", icon: "🩸" },
-                        { title: "Soins en ophtalmologie", icon: "👁️" }
+                        { title: "Puériculture", icon: "👶", url: "https://mega.nz/file/example" },
+                        { title: "Soins en pédiatrie", icon: "🧸", url: "https://mega.nz/file/example" },
+                        { title: "Soins en gynéco-obstétrique", icon: "🤱", url: "https://mega.nz/file/example" },
+                        { title: "Soins en gastro – entérologie", icon: "🍱", url: "https://mega.nz/file/example" },
+                        { title: "Soins en uro-néphrologie", icon: "🧪", url: "https://mega.nz/file/example" },
+                        { title: "Soins en neuropsychiatrie", icon: "🧠", url: "https://mega.nz/file/example" },
+                        { title: "Soins en oto-rhino-laryngologie", icon: "👂", url: "https://mega.nz/file/example" },
+                        { title: "Soins en dermatologie", icon: "🧴", url: "https://mega.nz/file/example" },
+                        { title: "Soins endocrinologie", icon: "🩸", url: "https://mega.nz/file/example" },
+                        { title: "Soins en ophtalmologie", icon: "👁️", url: "https://mega.nz/file/example" }
                     ]
                 }
             }
@@ -340,7 +338,6 @@
         let currentYear = 1;
         let currentSpecialty = "";
         let currentView = "home"; // home | levels | details | notavailable
-
         function initApp() {
             const grid = document.getElementById('categories-grid');
             const sidebarList = document.getElementById('sidebar-list');
@@ -364,13 +361,11 @@
                     <div class="text-blue-600 font-bold opacity-0 group-hover:opacity-100 transition">تصفح ←</div>
                 `;
                 grid.appendChild(card);
-
                 const li = document.createElement('li');
                 li.innerHTML = `<button onclick="handleSidebarSelection('${cat.key}', '${cat.title}')" class="w-full text-right p-3 rounded-lg hover:bg-slate-50 flex items-center gap-3"><span>${cat.icon}</span><span>${cat.title}</span></button>`;
                 sidebarList.appendChild(li);
             });
         }
-
         function handleSidebarSelection(key, title) {
             currentSpecialty = key;
             currentView = "levels";
@@ -381,7 +376,6 @@
                 showLevels(title);
             }
         }
-
         function showNotAvailable() {
             document.getElementById('categories-grid').classList.add('hidden');
             document.getElementById('levels-grid').classList.add('hidden');
@@ -394,7 +388,6 @@
             document.getElementById('section-title').innerText = "غير متاح";
             currentView = "notavailable";
         }
-
         function showLevels(title) {
             document.getElementById('categories-grid').classList.add('hidden');
             document.getElementById('not-available').classList.add('hidden');
@@ -405,45 +398,43 @@
             document.getElementById('breadcrumb-sep').classList.add('hidden');
             document.getElementById('breadcrumb-level-2').innerText = "";
             document.getElementById('section-title').innerText = "اختر السنة الدراسية";
-           
+          
             const y3 = document.getElementById('year3-btn');
             if(currentSpecialty === 'ats') y3.classList.add('hidden');
             else y3.classList.remove('hidden');
-           
+          
             currentView = "levels";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         function showSemesterDetails(year) {
             currentYear = year;
             currentView = "details";
             document.getElementById('levels-grid').classList.add('hidden');
             document.getElementById('details-grid').classList.remove('hidden');
             document.getElementById('breadcrumb-sep').classList.remove('hidden');
-           
+          
             const yearsMap = {1: "السنة الأولى", 2: "السنة الثانية", 3: "السنة الثالثة"};
             const sMap = { 1: ["S1", "S2"], 2: ["S3", "S4"], 3: ["S5", "S6"] };
-           
+          
             document.getElementById('breadcrumb-level-2').innerText = yearsMap[year];
             document.getElementById('tab-left').innerText = sMap[year][0];
             document.getElementById('tab-right').innerText = sMap[year][1];
-           
+          
             switchSemester('left');
         }
-
         function switchSemester(side) {
             const container = document.getElementById('lessons-container');
             document.getElementById('tab-left').classList.toggle('active', side === 'left');
             document.getElementById('tab-right').classList.toggle('active', side === 'right');
-           
+          
             container.innerHTML = '';
-           
+          
             const yearKey = `year${currentYear}`;
             let semKey;
             if(currentYear === 1) semKey = (side === 'left' ? 's1' : 's2');
             else if(currentYear === 2) semKey = (side === 'left' ? 's3' : 's4');
             else semKey = (side === 'left' ? 's5' : 's6');
-           
+          
             const lessons = (lessonsData[currentSpecialty] && lessonsData[currentSpecialty][yearKey] && lessonsData[currentSpecialty][yearKey][semKey]) ? lessonsData[currentSpecialty][yearKey][semKey] : [];
             if (!lessons || lessons.length === 0) {
                 container.innerHTML = `<div class="col-span-full p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 italic">لا توجد دروس مضافة حالياً لهذا السداسي.</div>`;
@@ -466,7 +457,6 @@
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         function showHome() {
             document.getElementById('categories-grid').classList.remove('hidden');
             document.getElementById('levels-grid').classList.add('hidden');
@@ -476,7 +466,6 @@
             document.getElementById('section-title').innerText = "الأقسام المتاحة";
             currentView = "home";
         }
-
         function goBack() {
             if (currentView === "levels") {
                 showHome();
@@ -486,12 +475,10 @@
                 showHome();
             }
         }
-
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('closed');
             document.getElementById('overlay').classList.toggle('hidden');
         }
-
         initApp();
     </script>
 </body>
