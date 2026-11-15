@@ -1,95 +1,444 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ZedTV</title>
+<meta name="theme-color" content="#090b11">
+<title>ZedTV Ultimate</title>
 <style>
-:root{--bg:#0d0f14;--card:#171a22;--txt:#eef0f5;--mut:#8b92a5;--acc:#e50914}
+:root {
+  --bg:#090b11;
+  --panel:#141823;
+  --panel2:#1b2130;
+  --red:#e50914;
+  --text:#f5f6fa;
+  --muted:#8992a5;
+  --border:#282e3c;
+  --green:#23c987;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,Tahoma,Arial,sans-serif}
-header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid #222836}
-header b{font-size:22px;letter-spacing:1px}header b span{color:var(--acc)}
-main{max-width:1000px;margin:20px auto;padding:0 16px;display:grid;gap:16px}
-.bar{display:flex;gap:8px;flex-wrap:wrap}
-input{flex:1;min-width:200px;padding:12px;border-radius:10px;border:1px solid #2a3040;background:var(--card);color:var(--txt);direction:ltr;text-align:left}
-button{padding:12px 18px;border:0;border-radius:10px;background:var(--acc);color:#fff;font-weight:700;cursor:pointer}
-button.sec{background:#2a3040}
-.player{position:relative;background:#000;border-radius:14px;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.player img{max-width:100%;max-height:78vh;display:none}
-.player.live img{display:block}
-.player video{max-width:100%;max-height:78vh;display:none}
-.player.vid video{display:block}
-.player.vid img{display:none!important}
-.ph{color:var(--mut);text-align:center;padding:20px;line-height:1.9}
-.player.live .ph{display:none}
-.badge{position:absolute;top:10px;right:10px;background:var(--acc);padding:3px 10px;border-radius:20px;font-size:12px;display:none}
-.player.live .badge{display:block}
-#st{color:var(--mut);font-size:14px}
-ol{color:var(--mut);line-height:2;background:var(--card);padding:14px 34px;border-radius:12px;margin:0}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 50% -20%,#242033 0%,transparent 55%),
+    var(--bg);
+  color:var(--text);
+  font-family:system-ui,Tahoma,Arial,sans-serif;
+}
+button{font:inherit;cursor:pointer}
+.topbar{
+  height:76px;padding:0 5%;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:#0d1018eF;
+  position:sticky;top:0;z-index:5;
+  backdrop-filter:blur(18px);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:43px;height:43px;border-radius:13px;
+  background:linear-gradient(145deg,#ff343e,#a50009);
+  display:grid;place-items:center;
+  font-size:23px;font-weight:900;
+  box-shadow:0 5px 25px #e509143d;
+}
+.brand-name{font-size:21px;font-weight:900;letter-spacing:1px}
+.brand-name span{color:var(--red)}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}
+.top-status{
+  border:1px solid #244c3e;background:#10271f;
+  color:#6ee6b2;padding:8px 14px;border-radius:30px;
+  font-size:12px;
+}
+.container{width:min(1150px,94%);margin:32px auto 60px}
+.intro{margin-bottom:25px}
+.intro h1{font-size:clamp(25px,4vw,36px);margin:0 0 8px}
+.intro p{color:var(--muted);margin:0;font-size:14px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:20px}
+.card{
+  background:linear-gradient(145deg,#171c28,#11151e);
+  border:1px solid var(--border);
+  border-radius:20px;padding:20px;
+  box-shadow:0 15px 45px #0003;
+}
+.card-title{
+  display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:16px;
+}
+.card-title h2{font-size:17px;margin:0}
+.pill{
+  background:#252c3a;color:#abb5c8;
+  padding:6px 11px;border-radius:30px;font-size:11px;
+}
+.pill.live{background:#143c2e;color:#68e6ac}
+.screen{
+  position:relative;width:100%;
+  aspect-ratio:16/9;background:#030407;
+  border:1px solid #2a3040;border-radius:15px;
+  overflow:hidden;display:flex;align-items:center;
+  justify-content:center;
+}
+.screen video{
+  width:100%;height:100%;
+  object-fit:contain;background:#000;
+  display:none;
+}
+.screen.active video{display:block}
+.placeholder{text-align:center;padding:20px;color:var(--muted)}
+.placeholder .phone{font-size:55px;margin-bottom:12px}
+.placeholder strong{display:block;color:#e7eaf0;font-size:16px}
+.placeholder p{font-size:12px;line-height:1.9}
+.live-tag{
+  position:absolute;top:13px;right:13px;
+  background:#d91421;color:white;
+  padding:6px 11px;border-radius:7px;
+  font-size:11px;display:none;z-index:2;
+}
+.screen.active .live-tag{display:block}
+.controls{
+  display:flex;flex-wrap:wrap;gap:10px;
+  margin-top:16px;
+}
+.btn{
+  border:0;border-radius:11px;padding:12px 17px;
+  font-weight:700;display:flex;align-items:center;
+  justify-content:center;gap:8px;
+  transition:.2s;
+}
+.btn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.primary{background:var(--red);color:white;flex:1}
+.secondary{background:#292f3d;color:#f3f4f8}
+.danger{background:#3b2028;color:#ff8790}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.volume-row{
+  display:flex;align-items:center;gap:13px;
+  margin-top:17px;padding:13px;
+  border-radius:12px;background:#0d111a;
+}
+.volume-row input{flex:1;accent-color:var(--red)}
+.volume-row span{font-size:13px;color:var(--muted)}
+.info-row{
+  display:flex;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;margin-top:15px;
+  font-size:12px;color:var(--muted);
+}
+.status{display:flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;background:#777}
+.dot.green{background:var(--green);box-shadow:0 0 9px var(--green)}
+.dot.red{background:var(--red)}
+.side{display:grid;gap:15px;align-content:start}
+.side h3{font-size:15px;margin:0 0 15px}
+.step{display:flex;gap:12px;margin:15px 0}
+.number{
+  width:27px;height:27px;flex-shrink:0;
+  background:#34202a;color:#ff777f;
+  border-radius:8px;display:grid;place-items:center;
+  font-size:12px;font-weight:bold;
+}
+.step p{font-size:12px;line-height:1.8;color:#aab1c0;margin:0}
+.step b{color:white}
+.tip{
+  padding:13px;border:1px solid #4b3b23;
+  background:#2b2114;border-radius:12px;
+  color:#f1c77e;font-size:12px;line-height:1.9;
+}
+.footer{text-align:center;color:#616b7d;font-size:11px;margin-top:25px}
+.hidden{display:none!important}
+@media(max-width:850px){
+  .layout{grid-template-columns:1fr}
+  .side{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .topbar{height:65px;padding:0 4%}
+  .container{margin-top:22px}
+  .card{padding:13px}
+  .side{grid-template-columns:1fr}
+  .controls .btn{flex:1 1 40%}
+  .top-status{font-size:10px}
+}
 </style>
 </head>
 <body>
-<header><b>Zed<span>TV</span></b><span style="color:var(--mut)">مشغّل شاشة الهاتف</span></header>
-<main>
-  <div class="bar">
-    <input id="u" placeholder="http://192.168.1.20:8080" inputmode="url">
-    <button id="go">▶ تشغيل</button>
-    <button id="stop" class="sec">■ إيقاف</button>
-    <button id="fs" class="sec">⛶ ملء الشاشة</button>
-    <button id="mu" class="sec">🔊 الصوت: يعمل</button>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Z</div>
+    <div>
+      <div class="brand-name">ZED<span>TV</span></div>
+      <small>ULTIMATE PLAYER</small>
+    </div>
   </div>
-  <div class="bar">
-    <input id="au" placeholder="رابط الصوت (اختياري) مثل http://192.168.1.20:8080/audio.opus">
+  <div class="top-status">● LOCAL WI-FI MODE</div>
+</header>
+
+<main class="container">
+  <section class="intro">
+    <h1>شاشة هاتفك، بتجربة سينمائية</h1>
+    <p>اعرض هاتف Android داخل مشغل احترافي مع الصوت والتحكم في العرض.</p>
+  </section>
+
+  <div class="layout">
+    <section class="card">
+      <div class="card-title">
+        <h2>مشغل الشاشة المباشر</h2>
+        <span class="pill" id="livePill">غير متصل</span>
+      </div>
+
+      <div class="screen" id="screen">
+        <div class="placeholder" id="placeholder">
+          <div class="phone">📱</div>
+          <strong>مرحباً بك في ZedTV Ultimate</strong>
+          <p>شغّل scrcpy أولاً، ثم اضغط بدء المشاركة<br>واختر نافذة الهاتف من Chrome.</p>
+        </div>
+        <div class="live-tag">● LIVE</div>
+        <video id="player" autoplay playsinline></video>
+      </div>
+
+      <div class="controls">
+        <button class="btn primary" id="startBtn">▶ بدء المشاركة</button>
+        <button class="btn secondary" id="fullscreenBtn">⛶ ملء الشاشة</button>
+        <button class="btn danger" id="stopBtn" disabled>■ إيقاف</button>
+      </div>
+
+      <div class="volume-row">
+        <span>🔊 الصوت</span>
+        <input id="volume" type="range" min="0" max="100" value="100">
+        <span id="volumeText">100%</span>
+        <button class="btn secondary" id="muteBtn">كتم</button>
+      </div>
+
+      <div class="info-row">
+        <span class="status"><i class="dot" id="videoDot"></i><span id="videoStatus">الفيديو: انتظار</span></span>
+        <span class="status"><i class="dot" id="audioDot"></i><span id="audioStatus">الصوت: انتظار</span></span>
+        <span id="resolution">الدقة: --</span>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="card">
+        <h3>كيفية الاتصال</h3>
+        <div class="step">
+          <span class="number">1</span>
+          <p>افتح <b>scrcpy</b> على الكمبيوتر واتصل بالهاتف عبر Wi-Fi.</p>
+        </div>
+        <div class="step">
+          <span class="number">2</span>
+          <p>تأكد أن نافذة الهاتف ظاهرة على سطح المكتب.</p>
+        </div>
+        <div class="step">
+          <span class="number">3</span>
+          <p>اضغط بدء المشاركة في ZedTV.</p>
+        </div>
+        <div class="step">
+          <span class="number">4</span>
+          <p>اختر نافذة scrcpy من نافذة Chrome، وفعّل مشاركة الصوت إن ظهر الخيار.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>حالة النظام</h3>
+        <div class="step">
+          <span class="number">✓</span>
+          <p><b>Android 12+</b><br>نقل صوت الهاتف مدعوم بواسطة scrcpy.</p>
+        </div>
+        <div class="step">
+          <span class="number">✓</span>
+          <p><b>Google Chrome</b><br>التقاط الشاشة من خلال Screen Capture API.</p>
+        </div>
+        <div class="tip">
+          ملاحظة: توفر الصوت داخل صفحة الويب يعتمد على مصدر المشاركة وما يسمح به Chrome. إذا لم يظهر مسار صوت، فلن يتم اختراع صوت أو تشغيل صوت صامت على أنه متصل.
+        </div>
+      </section>
+    </aside>
   </div>
-  <div id="st">غير متصل</div>
-  <div class="player" id="p">
-    <div class="badge">● مباشر</div>
-    <div class="ph">📱<br>أدخل عنوان بث الهاتف ثم اضغط تشغيل</div>
-    <img id="v" alt="شاشة الهاتف">
-    <video id="vd" playsinline autoplay controls></video>
-    <audio id="a" autoplay></audio>
+
+  <div class="footer">
+    ZedTV Ultimate · Local Screen Sharing · No external streaming server
   </div>
-  <ol>
-    <li>على هاتف أندرويد ثبّت تطبيق <b>Screen Stream over HTTP</b> (Google Play).</li>
-    <li>اتصل الهاتف والجهاز الذي يفتح هذه الصفحة بنفس شبكة الواي فاي.</li>
-    <li>في التطبيق اضغط <b>Start</b> ووافق على التقاط الشاشة، سيظهر عنوان مثل <code dir="ltr">http://192.168.1.20:8080</code>.</li>
-    <li>الصق العنوان أعلاه واضغط تشغيل.</li>
-  </ol>
 </main>
+
 <script>
-const $=id=>document.getElementById(id),v=$('v'),vd=$('vd'),a=$('a'),p=$('p'),st=$('st'),u=$('u'),au=$('au');
-try{u.value=localStorage.getItem('zedtv_url')||'';au.value=localStorage.getItem('zedtv_au')||''}catch(e){}
-let url='';
-const setSt=t=>st.textContent=t;
-const isVid=x=>/\.(m3u8|mp4|webm|ogg)(\?|$)/i.test(x);
-function stopAll(){v.removeAttribute('src');vd.pause();vd.removeAttribute('src');vd.load();a.pause();a.removeAttribute('src');p.classList.remove('live','vid')}
-$('go').onclick=()=>{
-  let x=u.value.trim();
-  if(!x)return setSt('أدخل العنوان أولاً');
-  if(!/^https?:\/\//.test(x))x='http://'+x;
-  stopAll();url=x.replace(/\/$/,'');
-  try{localStorage.setItem('zedtv_url',x);localStorage.setItem('zedtv_au',au.value.trim())}catch(e){}
-  setSt('جارٍ الاتصال...');
-  if(isVid(x)){
-    p.classList.add('vid');vd.muted=false;vd.src=x;
-    vd.play().then(()=>{p.classList.add('live');setSt('متصل ✔ (فيديو مع صوت)')}).catch(()=>setSt('اضغط زر التشغيل داخل المشغّل'));
-  }else{
-    v.src=url+'/stream.mjpeg?t='+Date.now();
+const $ = id => document.getElementById(id);
+
+const player = $("player");
+const screen = $("screen");
+const placeholder = $("placeholder");
+const startBtn = $("startBtn");
+const stopBtn = $("stopBtn");
+const fullscreenBtn = $("fullscreenBtn");
+const muteBtn = $("muteBtn");
+const volume = $("volume");
+
+let captureStream = null;
+let muted = false;
+
+function status(id, text, state="") {
+  $(id).textContent = text;
+  const dot = id === "videoStatus" ? $("videoDot") : $("audioDot");
+  dot.className = "dot " + state;
+}
+
+function updateAudio() {
+  if (!captureStream) return;
+
+  const tracks = captureStream.getAudioTracks();
+  if (tracks.length && tracks.some(t => t.readyState === "live")) {
+    status("audioStatus", "الصوت: متاح", "green");
+  } else {
+    status("audioStatus", "الصوت: غير متوفر من المصدر", "red");
   }
-  const y=au.value.trim();
-  if(y){a.muted=false;a.src=y;a.play().then(()=>setSt(st.textContent+' + صوت')).catch(()=>setSt('تعذّر تشغيل الصوت: تحقق من رابط الصوت'))}
-};
-vd.onerror=()=>setSt('تعذّر تشغيل الفيديو، تحقق من الرابط');
-v.onload=()=>{p.classList.add('live');setSt('متصل ✔')};
-v.onerror=()=>{
-  if(v.src.includes('stream.mjpeg')&&url){v.src=url+'/?t='+Date.now();return}
-  p.classList.remove('live');
-  setSt('تعذّر الاتصال: تأكد من الشبكة والعنوان. إن فتحت الصفحة عبر https فالمتصفح يحجب بث http، افتح الملف محلياً.')
-};
-$('stop').onclick=()=>{stopAll();setSt('تم الإيقاف')};
-$('fs').onclick=()=>{(p.requestFullscreen||p.webkitRequestFullscreen).call(p)};
-$('mu').onclick=()=>{const m=!a.muted;a.muted=m;vd.muted=m;$('mu').textContent=m?'🔇 الصوت: مكتوم':'🔊 الصوت: يعمل'};
+}
+
+function stopCapture() {
+  if (captureStream) {
+    captureStream.getTracks().forEach(track => track.stop());
+    captureStream = null;
+  }
+
+  player.pause();
+  player.srcObject = null;
+  player.muted = false;
+  player.volume = 1;
+
+  screen.classList.remove("active");
+  placeholder.classList.remove("hidden");
+
+  $("livePill").textContent = "غير متصل";
+  $("livePill").classList.remove("live");
+
+  status("videoStatus", "الفيديو: متوقف");
+  status("audioStatus", "الصوت: متوقف");
+  $("resolution").textContent = "الدقة: --";
+
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+  muteBtn.textContent = "كتم";
+}
+
+async function startCapture() {
+  if (!navigator.mediaDevices?.getDisplayMedia) {
+    alert("التقاط الشاشة غير مدعوم. افتح الموقع باستخدام Chrome عبر localhost أو HTTPS.");
+    return;
+  }
+
+  try {
+    startBtn.disabled = true;
+    startBtn.textContent = "جارٍ الاتصال...";
+
+    captureStream = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        frameRate: { ideal: 60, max: 60 }
+      },
+      audio: true,
+      preferCurrentTab: false,
+      selfBrowserSurface: "exclude",
+      systemAudio: "include"
+    });
+
+    player.srcObject = captureStream;
+    player.muted = false;
+    player.volume = Number(volume.value) / 100;
+
+    await player.play();
+
+    screen.classList.add("active");
+    placeholder.classList.add("hidden");
+
+    $("livePill").textContent = "متصل";
+    $("livePill").classList.add("live");
+
+    startBtn.textContent = "● المشاركة تعمل";
+    stopBtn.disabled = false;
+
+    status("videoStatus", "الفيديو: متصل", "green");
+
+    const videoTrack = captureStream.getVideoTracks()[0];
+    if (videoTrack) {
+      const settings = videoTrack.getSettings();
+      if (settings.width && settings.height) {
+        $("resolution").textContent =
+          `الدقة: ${settings.width} × ${settings.height}`;
+      }
+      videoTrack.addEventListener("ended", stopCapture, {once:true});
+    }
+
+    updateAudio();
+
+    captureStream.getAudioTracks().forEach(track => {
+      track.addEventListener("ended", updateAudio);
+    });
+
+    if (!captureStream.getAudioTracks().length) {
+      alert(
+        "تم الاتصال بالفيديو، لكن Chrome لم يوفر مسار صوت. " +
+        "أعد المشاركة واختر مصدراً يسمح بمشاركة صوت النظام."
+      );
+    }
+
+  } catch (error) {
+    console.error(error);
+    if (captureStream) stopCapture();
+
+    startBtn.textContent = "▶ بدء المشاركة";
+
+    if (error.name !== "NotAllowedError") {
+      alert("تعذر بدء المشاركة: " + error.message);
+    }
+  } finally {
+    startBtn.disabled = false;
+    if (!captureStream) startBtn.textContent = "▶ بدء المشاركة";
+  }
+}
+
+startBtn.addEventListener("click", startCapture);
+stopBtn.addEventListener("click", stopCapture);
+
+muteBtn.addEventListener("click", () => {
+  muted = !muted;
+  player.muted = muted;
+  muteBtn.textContent = muted ? "إلغاء الكتم" : "كتم";
+});
+
+volume.addEventListener("input", () => {
+  player.volume = Number(volume.value) / 100;
+  $("volumeText").textContent = volume.value + "%";
+
+  if (player.volume > 0 && muted) {
+    muted = false;
+    player.muted = false;
+    muteBtn.textContent = "كتم";
+  }
+});
+
+fullscreenBtn.addEventListener("click", async () => {
+  try {
+    if (!document.fullscreenElement) {
+      await screen.requestFullscreen();
+    } else {
+      await document.exitFullscreen();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.code === "Escape") return;
+  if (event.code === "KeyM" && captureStream) {
+    muted = !muted;
+    player.muted = muted;
+    muteBtn.textContent = muted ? "إلغاء الكتم" : "كتم";
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  if (captureStream) {
+    captureStream.getTracks().forEach(track => track.stop());
+  }
+});
 </script>
 </body>
 </html>
