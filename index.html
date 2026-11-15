@@ -18,6 +18,9 @@ button.sec{background:#2a3040}
 .player{position:relative;background:#000;border-radius:14px;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .player img{max-width:100%;max-height:78vh;display:none}
 .player.live img{display:block}
+.player video{max-width:100%;max-height:78vh;display:none}
+.player.vid video{display:block}
+.player.vid img{display:none!important}
 .ph{color:var(--mut);text-align:center;padding:20px;line-height:1.9}
 .player.live .ph{display:none}
 .badge{position:absolute;top:10px;right:10px;background:var(--acc);padding:3px 10px;border-radius:20px;font-size:12px;display:none}
@@ -34,12 +37,18 @@ ol{color:var(--mut);line-height:2;background:var(--card);padding:14px 34px;borde
     <button id="go">▶ تشغيل</button>
     <button id="stop" class="sec">■ إيقاف</button>
     <button id="fs" class="sec">⛶ ملء الشاشة</button>
+    <button id="mu" class="sec">🔊 الصوت: يعمل</button>
+  </div>
+  <div class="bar">
+    <input id="au" placeholder="رابط الصوت (اختياري) مثل http://192.168.1.20:8080/audio.opus">
   </div>
   <div id="st">غير متصل</div>
   <div class="player" id="p">
     <div class="badge">● مباشر</div>
     <div class="ph">📱<br>أدخل عنوان بث الهاتف ثم اضغط تشغيل</div>
     <img id="v" alt="شاشة الهاتف">
+    <video id="vd" playsinline autoplay controls></video>
+    <audio id="a" autoplay></audio>
   </div>
   <ol>
     <li>على هاتف أندرويد ثبّت تطبيق <b>Screen Stream over HTTP</b> (Google Play).</li>
@@ -49,27 +58,38 @@ ol{color:var(--mut);line-height:2;background:var(--card);padding:14px 34px;borde
   </ol>
 </main>
 <script>
-const $=id=>document.getElementById(id),v=$('v'),p=$('p'),st=$('st'),u=$('u');
-try{u.value=localStorage.getItem('zedtv_url')||''}catch(e){}
+const $=id=>document.getElementById(id),v=$('v'),vd=$('vd'),a=$('a'),p=$('p'),st=$('st'),u=$('u'),au=$('au');
+try{u.value=localStorage.getItem('zedtv_url')||'';au.value=localStorage.getItem('zedtv_au')||''}catch(e){}
 let url='';
-function setSt(t){st.textContent=t}
+const setSt=t=>st.textContent=t;
+const isVid=x=>/\.(m3u8|mp4|webm|ogg)(\?|$)/i.test(x);
+function stopAll(){v.removeAttribute('src');vd.pause();vd.removeAttribute('src');vd.load();a.pause();a.removeAttribute('src');p.classList.remove('live','vid')}
 $('go').onclick=()=>{
-  let a=u.value.trim();
-  if(!a)return setSt('أدخل العنوان أولاً');
-  if(!/^https?:\/\//.test(a))a='http://'+a;
-  url=a.replace(/\/$/,'');
-  try{localStorage.setItem('zedtv_url',a)}catch(e){}
+  let x=u.value.trim();
+  if(!x)return setSt('أدخل العنوان أولاً');
+  if(!/^https?:\/\//.test(x))x='http://'+x;
+  stopAll();url=x.replace(/\/$/,'');
+  try{localStorage.setItem('zedtv_url',x);localStorage.setItem('zedtv_au',au.value.trim())}catch(e){}
   setSt('جارٍ الاتصال...');
-  v.src=url+'/stream.mjpeg?t='+Date.now();
+  if(isVid(x)){
+    p.classList.add('vid');vd.muted=false;vd.src=x;
+    vd.play().then(()=>{p.classList.add('live');setSt('متصل ✔ (فيديو مع صوت)')}).catch(()=>setSt('اضغط زر التشغيل داخل المشغّل'));
+  }else{
+    v.src=url+'/stream.mjpeg?t='+Date.now();
+  }
+  const y=au.value.trim();
+  if(y){a.muted=false;a.src=y;a.play().then(()=>setSt(st.textContent+' + صوت')).catch(()=>setSt('تعذّر تشغيل الصوت: تحقق من رابط الصوت'))}
 };
+vd.onerror=()=>setSt('تعذّر تشغيل الفيديو، تحقق من الرابط');
 v.onload=()=>{p.classList.add('live');setSt('متصل ✔')};
 v.onerror=()=>{
   if(v.src.includes('stream.mjpeg')&&url){v.src=url+'/?t='+Date.now();return}
   p.classList.remove('live');
   setSt('تعذّر الاتصال: تأكد من الشبكة والعنوان. إن فتحت الصفحة عبر https فالمتصفح يحجب بث http، افتح الملف محلياً.')
 };
-$('stop').onclick=()=>{v.removeAttribute('src');p.classList.remove('live');setSt('تم الإيقاف')};
+$('stop').onclick=()=>{stopAll();setSt('تم الإيقاف')};
 $('fs').onclick=()=>{(p.requestFullscreen||p.webkitRequestFullscreen).call(p)};
+$('mu').onclick=()=>{const m=!a.muted;a.muted=m;vd.muted=m;$('mu').textContent=m?'🔇 الصوت: مكتوم':'🔊 الصوت: يعمل'};
 </script>
 </body>
 </html>
